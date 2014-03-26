@@ -23,6 +23,10 @@
       visibility: hidden;
     }
 
+    #saveStatus {
+      visibility: hidden;
+    }
+
     .axis path,
     .axis line {
       fill: none;
@@ -54,6 +58,7 @@
     <button id='useRaw'>Use This</button>
   </div>
   <p id='status'></p>
+  <p id='saveStatus'>Save collected data? <button id='saveData'>Save</button></p>
   <div id='genGraph'>
     <p>Select the wave(s):</p>
     <select id='graphs' size='10' multiple>
@@ -86,6 +91,7 @@
   var reset = document.getElementById('reset');
   var generate = document.getElementById('generate');
   var useRaw = document.getElementById('useRaw');
+  var saveData = document.getElementById('saveData');
 
   // listen to Reset button click
   reset.onclick = function() {
@@ -112,6 +118,11 @@
       time = duration.value;
     }
     listen(port.value);
+  }
+
+  saveData.onclick = function() {
+    var blob = new Blob([JSON.stringify(dataset)], {type: 'text/plain;charset=utf-8'});
+    saveAs(blob, 'dataset.txt');
   }
 
   /**
@@ -177,6 +188,8 @@
       console.log(JSON.stringify(dataset));
       var status = document.getElementById('status');
       status.textContent = "" + time + " seconds of data collected.";
+      var saveStatus = document.getElementById('saveStatus');
+      saveStatus.style.visibility = 'visible';
       var graphs = document.getElementById('genGraph');
       graphs.style.visibility = 'visible';
     }
